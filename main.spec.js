@@ -24,5 +24,48 @@ describe('main.js', function(){
             expect(spy).toHaveBeenCalledWith(8);
             expect(spy).toHaveBeenCalledTimes(1);
         })
+
+        it('calls calls updateResult using and.callThrogh()', function(){
+            spyOn(window, 'updateResult')
+            spyOn(Calculator.prototype, 'multiply').and.callThrough();
+
+            calculate('5*5')
+
+            expect(window.updateResult).toHaveBeenCalled();
+            expect(window.updateResult).toHaveBeenCalledWith(25);
+            // expect(spy).toHaveBeenCalledTimes(1);
+        });
+
+        it('calls  updateResult using and.callFake()', function(){
+            spyOn(window, 'updateResult')
+            spyOn(Calculator.prototype, 'multiply').and.callFake(function(){
+                //
+                //
+                return 100
+            })
+
+            calculate('5*5')
+
+            expect(window.updateResult).toHaveBeenCalled();
+            expect(window.updateResult).toHaveBeenCalledWith(100);
+            // expect(spy).toHaveBeenCalledTimes(1);
+        });
+
+        it('calls  updateResult using and.returnValue', function(){
+            spyOn(window, 'updateResult')
+            spyOn(Calculator.prototype, 'multiply').and.returnValue('whatever it returns');
+
+            calculate('5*5')
+
+            expect(window.updateResult).toHaveBeenCalled();
+            expect(window.updateResult).toHaveBeenCalledWith('whatever it returns');
+            // expect(spy).toHaveBeenCalledTimes(1);
+        });
+        it('dest not handle errors', function(){
+            spyOn(Calculator.prototype, 'multiply').and.throwError('some error');
+
+            expect(function(){calculate('5*5')}).toThrowError('some error');
+        })
+        
     })
 })
